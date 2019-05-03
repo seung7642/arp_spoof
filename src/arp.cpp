@@ -1,5 +1,15 @@
+Arp::Arp()
+{
+
+}
+
+Arp::~Arp()
+{
+
+}
+	
 int
-setArpPacket()
+Arp::setArpPacket()
 {
 	return 0;
 }
