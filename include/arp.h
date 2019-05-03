@@ -3,7 +3,10 @@ class Arp
 	public:
 		explicit Arp();
 		~Arp();
-		int setArpPacket();
+		u_char* getSenderMacAddress(u_char& interface);
+		int setArpHeader(u_char& senderMacAddress, char& sendIp, char& targetIp, Arp& arp);
+		int sendArpPacket(pcap_t& handle, char& interface, char& senderIpAddress, char& targetIpAddress);
+		int redirectPacket();
 
 	private:
 		uint16_t hardwareType;
@@ -15,4 +18,10 @@ class Arp
 		uint8_t senderProtocolAddress[4];
 		uint8_t targetHardwareAddress[6];
 		uint8_t targetProtocolAddress[4];
+
+		constexpr uint16_t ARP_HW_TYPE{0x0001};
+		constexpr uint16_t ARP_PROTO_TYPE{0x0800};
+		constexpr uint8_t ARP_HW_LEN{0x06};
+		constexpr uint8_t ARP_PROTO_LEN{0x04};
+		constexpr uint16_t ARP_OPCODE{0x0001};
 }
