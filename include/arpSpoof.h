@@ -2,7 +2,7 @@ class ArpSpoof
 {
 	public:
 		// method
-		explicit ArpSpoof();
+		ArpSpoof(arpHeader arp, etherHeader ether);
 		~ArpSpoof();
 		u_char* getSenderMacAddress(u_char& interface);
 		int setArpHeader(u_char& senderMacAddress, char& sendIp, char& targetIp, arpHeader& arp);
@@ -12,4 +12,5 @@ class ArpSpoof
 
 	private:
 		arpHeader arpHdr;
+		etherHeader etherHdr;
 }

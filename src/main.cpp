@@ -1,12 +1,5 @@
 #include "main.h"
-#include "arp.h"
-#include "ethernet.h"
-#include <stdio.h>
-
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sys/ioctl.h>
-#include <net/if.h>
+#include "arpSpoof.h"
 
 // Print Usage
 void

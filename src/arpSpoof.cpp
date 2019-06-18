@@ -1,15 +1,13 @@
 #include "arpSpoof.h"
-#include <iostream>
-#include <stdio.h>
 
-ArpSpoof::ArpSpoof()
+ArpSpoof::ArpSpoof(arpHeader arp, etherHeader ether) : arpHdr{ arp }, etherHdr{ ether }
 {
-
+	// do nothing
 }
 
 ArpSpoof::~ArpSpoof()
 {
-
+	// do nothing
 }
 
 u_char*
