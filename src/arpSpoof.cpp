@@ -1,6 +1,6 @@
 #include "arpSpoof.h"
 
-ArpSpoof::ArpSpoof(arpHeader arp, etherHeader ether) : arpHdr{ arp }, etherHdr{ ether }
+ArpSpoof::ArpSpoof(u_char& iface) : interface{ iface }, arpHdr{ 0 }, etherHdr{ 0 }
 {
 	// do nothing
 }
@@ -11,7 +11,7 @@ ArpSpoof::~ArpSpoof()
 }
 
 u_char*
-ArpSpoof::getSenderMacAddress(u_char& interface) 
+ArpSpoof::getSenderMacAddress() 
 {
 	int fd;
 	struct ifreq ifr;
@@ -21,7 +21,7 @@ ArpSpoof::getSenderMacAddress(u_char& interface)
 	fd = socket(AF_INET, SOCK_DGRAM, 0);
 
 	ifr.ifr_addr.sa_family = AF_INET;
-	strncpy(ifr.ifr_name, iface, IFNAMSIZ - 1);
+	strncpy(ifr.ifr_name, this->interface, IFNAMSIZ - 1);
 
 	ioctl(fd, SIOCGIFHWADDR, &ifr);
 	close(fd);
@@ -43,7 +43,7 @@ ArpSpoof::setEtherHeader(u_char& senderMacAddress, etherHeader eth)
 }
 	
 int
-ArpSpoof::sendArpPacket(IN pcap_t* handle, IN char* interface, IN char* senderIpAddress, IN char* targetIpAddress)
+ArpSpoof::sendInfectPacket(IN pcap_t* handle, IN char* senderIpAddress, IN char* targetIpAddress)
 {
 	u_char* senderMacAddress;
 	uint8_t packet[sizeof(etherHeader) + sizeof(arpHeader)];
@@ -56,7 +56,7 @@ ArpSpoof::sendArpPacket(IN pcap_t* handle, IN char* interface, IN char* senderIp
 }
 
 int
-ArpSpoof::redirectPacket()
+ArpSpoof::receivePacketRelay()
 {
 
 }
