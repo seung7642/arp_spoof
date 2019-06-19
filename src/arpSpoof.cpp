@@ -2,7 +2,8 @@
 
 ArpSpoof::ArpSpoof(u_char& iface) : interface{ iface }, arpHdr{ 0 }, etherHdr{ 0 }
 {
-	// do nothing
+	memset(senderMacAddress, 0x00, 6);
+	memset(targetMacAddress, 0x00, 6);
 }
 
 ArpSpoof::~ArpSpoof()
@@ -11,22 +12,11 @@ ArpSpoof::~ArpSpoof()
 }
 
 u_char*
-ArpSpoof::getSenderMacAddress() 
+ArpSpoof::getMacAddress(u_char* ip) 
 {
-	int fd;
-	struct ifreq ifr;
-	u_char* mac;
+	// getting MAC Address through Broadcasting.
 	
-	// Create Socket
-	fd = socket(AF_INET, SOCK_DGRAM, 0);
-
-	ifr.ifr_addr.sa_family = AF_INET;
-	strncpy(ifr.ifr_name, this->interface, IFNAMSIZ - 1);
-
-	ioctl(fd, SIOCGIFHWADDR, &ifr);
-	close(fd);
-
-	mac = (u_char*)ifr.ifr_hwaddr.sa_data;
+	
 	return mac;	
 }
 

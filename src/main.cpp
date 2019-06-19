@@ -1,6 +1,21 @@
 #include "main.h"
 #include "arpSpoof.h"
 
+u_char* 
+getTargetMacAddress() {
+	etherHeader eth;
+	arpHeader arp;
+
+	eth.destinationMacAddress = 0xFFFFFFFFFFFF;
+	eth.sourceMacAddress = 0x00; // My MAC Address
+	eth.type = ETHERTYPE_ARP;
+
+	arp.senderHardwareAddress = 0x00; // My MAC Address
+	arp.senderProtocolAddress = 0; // My IP Address
+	arp.targetHardwareAddress = 0xFFFFFFFFFFFF;
+	arp.targetProtocolAddress = 0; // Target IP Address
+}
+
 // Print Usage
 void
 usage()
@@ -27,11 +42,14 @@ main(int argc, char* argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	// do ARP Spoofing ...
+	// 1. getting me and target MAC Address
+
+	// 2. send ARP Packet to target for infect 
 	arp.setEtherHeader();
 	arp.setArpHeader();
 	arp.sendInfectPacket();
 
+	// 3. if receive packet of target, relay packet to target. 
 	arp.receivePacketRelay();
 
 
