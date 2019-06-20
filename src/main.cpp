@@ -1,27 +1,12 @@
 #include "main.h"
 #include "arpSpoof.h"
 
-u_char* 
-getTargetMacAddress() {
-	etherHeader eth;
-	arpHeader arp;
-
-	eth.destinationMacAddress = 0xFFFFFFFFFFFF;
-	eth.sourceMacAddress = 0x00; // My MAC Address
-	eth.type = ETHERTYPE_ARP;
-
-	arp.senderHardwareAddress = 0x00; // My MAC Address
-	arp.senderProtocolAddress = 0; // My IP Address
-	arp.targetHardwareAddress = 0xFFFFFFFFFFFF;
-	arp.targetProtocolAddress = 0; // Target IP Address
-}
-
 // Print Usage
 void
 usage()
 {
-	printf("Usage: arp_spoof <interface> <sender ip> <target ip>\n");
-	printf("sample: arp_spoof wlan0 10.0.0.1 10.0.0.2\n");
+	cout << "Usage: arp_spoof <interface> <sender ip> <target ip>" << endl;
+	cout << "sample: arp_spoof wlan0 10.0.0.1 10.0.0.2" << endl;
 }
 
 int
