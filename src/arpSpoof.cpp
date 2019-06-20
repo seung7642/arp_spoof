@@ -96,7 +96,22 @@ ArpSpoof::sendInfectPacket(IN pcap_t* handle, IN uint8_t* senderIpAddress, IN ui
 }
 
 int
-ArpSpoof::receivePacketRelay()
+ArpSpoof::receivePacketRelay(pcap_t* handle, uint8_t* senderIpAddress, uint8_t* targetIpAddress)
 {
+	struct pcap_pkthdr* pcapHeader;
+	uint8_t* packet;
 
+	if (pcap_next_ex(handle, &pcapHeader, &packet)) {
+		perror("pcap_next_ex");
+		exit(EXIT_FAILURE);
+	}
+
+	etherHeader* ether = (etherHeader*)packet;
+
+	switch (ntohs(ether->type)) {
+	case ETHERTYPE_ARP:
+
+	default:
+		break;
+	}
 }
