@@ -27,4 +27,33 @@
 // Constants
 #define PROMISCUOUS 1
 
+#define ETHERTYPE_IP 0x8000
+#define ETHERTYPE_ARP 0x0806
+
+#define ARP_HW_TYPE 0x0001
+#define ARP_PROTO_TYPE 0x0800
+#define ARP_HW_LEN 0x06
+#define ARP_PROTO_LEN 0x04
+#define ARP_OPCODE 0x0001
+
+#pragma pack(push, 1)
+typedef struct _etherHeader {
+	uint8_t destinationMacAddress[6];
+	uint8_t sourceMacAddress[6];
+	uint16_t type;
+} etherHeader;
+
+typedef struct _arpHeader {
+	uint16_t hardwardType;
+	uint16_t protocolType;
+	uint8_t hardwareLength;
+	uint8_t protocolLength;
+	uint16_t opcode;
+	uint8_t senderHardwareAddress[6];
+	uint8_t senderProtocolAddress[4];
+	uint8_t targetHardwareAddress[6];
+	uint8_t targetProtocolAddress[4];
+} arpHeader;
+#pragma pack(pop)
+
 #endif
