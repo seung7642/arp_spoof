@@ -1,16 +1,13 @@
 #include "arpSpoof.h"
 
-ArpSpoof::ArpSpoof(uint8_t& iface) : interface(iface)
-{
+ArpSpoof::ArpSpoof(uint8_t& iface) : interface(iface) {
 	memset(senderMacAddress, 0x00, 6);
 	memset(targetMacAddress, 0xFF, 6);
 	memset(etherHdr, 0x00, sizeof(struct _etherHeader));
 	memset(arpHdr, 0x00, sizeof(struct _arpHeader));
 }
 
-int
-ArpSpoof::setSenderMacAddress()
-{
+int ArpSpoof::setSenderMacAddress() {
 	// getting Sender MAC Address through ioctl().
 	struct ifreq ifr;
 	
@@ -33,9 +30,7 @@ ArpSpoof::setSenderMacAddress()
 	return 0;
 }
 
-int
-ArpSpoof::setTargetMacAddress(pcap_t& handle, uint8_t& senderIpAddress, uint8_t& targetIpAddress) 
-{
+int ArpSpoof::setTargetMacAddress(pcap_t& handle, uint8_t& senderIpAddress, uint8_t& targetIpAddress) {
 	// getting MAC Address through Broadcasting.
 	uint8_t packet[sizeof(etherHeader) + sizeof(arpHeader)];
 
@@ -84,32 +79,7 @@ int ArpSpoof::receiveTargetMacAddress(pcap_t& handle, uint8_t& senderIpAddress, 
 	}
 }
 
-int
-ArpSpoof::setArpHeader(uint8_t& senderIpAddress, uint8_t& targetIpAddress)
-{
-	memset(this->arpHdr.senderHardwareAddress, this->senderMacAddress, 6);
-	memset(this->arpHdr.targetHardwareAddress, this->targetMacAddress, 6);
-	memset(this->arpHdr.senderProtocolAddress, senderIpAddress, 4);
-	memset(this->arpHdr.targetProtocolAddress, targetIpAddress, 4);
-
-	this->arpHdr.hardwareType = htons(ARP_HW_TYPE);
-	this->arpHdr.protocolType = htons(ARP_PROTO_TYPE);
-	this->arpHdr.hardwareLength = ARP_HW_LEN;
-	this->arpHdr.protocolLength = ARP_PROTO_LEN;
-	this->arpHdr.opcode = htons(ARP_OPCODE);
-}
-
-int
-ArpSpoof::setEtherHeader()
-{
-	memset(this->etherHdr.destinationMacAddress, this->targetMacAddress, 6);
-	memset(this->etherHdr.sourceMacAddress, this->senderMacAddress, 6);
-	this->etherHdr.type = htons(ETHERTYPE_ARP);
-}
-	
-int
-ArpSpoof::sendInfectPacket(IN pcap_t& handle, IN uint8_t& senderIpAddress, IN uint8_t& targetIpAddress)
-{
+int ArpSpoof::sendInfectPacket(IN pcap_t& handle, IN uint8_t& senderIpAddress, IN uint8_t& targetIpAddress) {
 	uint8_t* senderMacAddress;
 	uint8_t packet[sizeof(etherHeader) + sizeof(arpHeader)];
 	etherHeader* ethernetPacket;
@@ -120,9 +90,7 @@ ArpSpoof::sendInfectPacket(IN pcap_t& handle, IN uint8_t& senderIpAddress, IN ui
 	return 0;
 }
 
-int
-ArpSpoof::receivePacketRelay(pcap_t& handle, uint8_t& senderIpAddress, uint8_t& targetIpAddress)
-{
+int ArpSpoof::receivePacketRelay(pcap_t& handle, uint8_t& senderIpAddress, uint8_t& targetIpAddress) {
 	struct pcap_pkthdr* pcapHeader;
 	uint8_t* packet;
 

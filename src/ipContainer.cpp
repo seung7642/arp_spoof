@@ -1,13 +1,10 @@
 #include "ipContainer.h"
 
-ipContainer::ipContainer(const char& ipAddress) : ipAddress{ ipAddress }
-{
+ipContainer::ipContainer(const char& ipAddress) : ipAddress{ ipAddress } {
 
 }
 
-void
-ipContainer::printIpAddress(ipContainer& ip) const
-{
+void ipContainer::printIpAddress(ipContainer& ip) const {
 	cout << ip << endl;
 }
 

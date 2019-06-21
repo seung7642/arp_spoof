@@ -1,25 +1,28 @@
 #ifndef _ARP_SPOOF_H
 #define _ARP_SPOOF_H
-#include "main.h"
 
-class ArpSpoof
-{
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+#pragma pack(push, 1)
+class ArpSpoof {
 private:
 	uint8_t& interface;
-	arpHeader arpHdr;
-	etherHeader etherHdr;
+	Arp arp;
+	Ethernet ethernet;
 	uint8_t* senderMacAddress;
 	uint8_t* targetMacAddress;
 
 public:
+	ArpSpoof() {};
 	ArpSpoof(uint8_t& interface);
 
 	int setSenderMacAddress();
 	int setTargetMacAddress(pcap_t& handle, uint8_t& senderIpAddress, uint8_t& targetIpAddress);
-	int setArpHeader(uint8_t& senderIpAddress, uint8_t& targetIpAddress);
-	int setEtherHeader();
 	int sendInfectPacket(pcap_t& handle, uint8_t& senderIpAddress, uint8_t& targetIpAddress);
 	int receivePacketRelay();
 };
+#pragma pack(pop)
 
 #endif

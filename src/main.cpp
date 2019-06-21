@@ -2,16 +2,12 @@
 #include "arpSpoof.h"
 
 // Print Usage
-void
-usage()
-{
+void usage() {
 	cout << "Usage: arp_spoof <interface> <sender ip> <target ip>" << endl;
 	cout << "sample: arp_spoof wlan0 10.0.0.1 10.0.0.2" << endl;
 }
 
-int
-main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
 	ArpSpoof arp{ argv[1] };
 	pcap_t* handle;
 	char errbuf[PCAP_ERRBUF_SIZE];

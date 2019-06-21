@@ -2,6 +2,7 @@
 #define _ARP_H
 
 #include <iostream>
+#include <cstring>
 using namespace std;
 
 #pragma pack(push, 1)
@@ -27,7 +28,7 @@ private:
 public:
 	Arp() {};
 	Arp(uint8_t& senderHw, uint8_t& senderIp, uint8_t& targetHw, uint8_t targetIp);
-	
+
 	friend ostream& operator<<(ostream& out, const Arp& arp);
 };
 #pragma pack(pop)
