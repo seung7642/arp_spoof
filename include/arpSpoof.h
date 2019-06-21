@@ -8,8 +8,8 @@ private:
 	uint8_t& interface;
 	arpHeader arpHdr;
 	etherHeader etherHdr;
-	uint8_t senderMacAddress[6];
-	uint8_t targetMacAddress[6];
+	uint8_t* senderMacAddress;
+	uint8_t* targetMacAddress;
 
 public:
 	ArpSpoof(uint8_t& interface);

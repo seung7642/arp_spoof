@@ -4,8 +4,8 @@ ArpSpoof::ArpSpoof(uint8_t& iface) : interface(iface)
 {
 	memset(senderMacAddress, 0x00, 6);
 	memset(targetMacAddress, 0xFF, 6);
-	memset(etherHdr, 0x00, sizeof(etherHeader));
-	memset(arpHdr, 0x00, sizeof(arpHeader));
+	memset(etherHdr, 0x00, sizeof(struct _etherHeader));
+	memset(arpHdr, 0x00, sizeof(struct _arpHeader));
 }
 
 int
@@ -27,7 +27,7 @@ ArpSpoof::setSenderMacAddress()
 		exit(EXIT_FAILURE);
 	}
 
-	memset(this->senderMacAddress, ifr.ifr_hwaddr.sa_data, 6);
+	memset(this->senderMacAddress, (uint8_t)ifr.ifr_hwaddr.sa_data, 6);
 
 	close(sock);
 	return 0;
