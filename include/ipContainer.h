@@ -1,5 +1,6 @@
 #ifndef _IP_CONTAINER_H
 #define _IP_CONTAINER_H
+#include <iostream>
 #include <stdint.h>
 
 class ipContainer {
@@ -19,5 +20,6 @@ public:
 			if (cnt--) cout << ".";
 		}
 	}
-}
+};
+
 #endif

@@ -1,4 +1,4 @@
-#include <iostream>
+#include "ipContainer.h"
 
 ipContainer::ipContainer(const char& ipAddress) : ipAddress{ ipAddress }
 {

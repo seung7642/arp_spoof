@@ -5,6 +5,7 @@
 #include <pcap/pcap.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdint.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -16,6 +17,7 @@
 
 // C++ Headers
 #include <iostream>
+using namespace std;
 
 // glibc 2.1 is missing the ifr_newname macro in <net/if.h>
 #ifndef ifr_newname

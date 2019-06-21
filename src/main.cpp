@@ -28,6 +28,8 @@ main(int argc, char* argv[])
 	}
 
 	// 1. getting me and target MAC Address
+	arp.setSenderMacAddress();
+	arp.setTargetMacAddress(handle, argv[2], argv[3]);
 
 	// 2. send ARP Packet to target for infect 
 	arp.setEtherHeader();
