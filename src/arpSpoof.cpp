@@ -3,8 +3,6 @@
 ArpSpoof::ArpSpoof(uint8_t& iface) : interface(iface) {
 	memset(senderMacAddress, 0x00, 6);
 	memset(targetMacAddress, 0xFF, 6);
-	memset(etherHdr, 0x00, sizeof(struct _etherHeader));
-	memset(arpHdr, 0x00, sizeof(struct _arpHeader));
 }
 
 int ArpSpoof::setSenderMacAddress() {
@@ -17,7 +15,7 @@ int ArpSpoof::setSenderMacAddress() {
 		exit(EXIT_FAILURE);
 	}
 
-	strncpy(ifr.ifr_name, this->interface, IFNAMSIZ - 1);
+	strncpy(ifr.ifr_name, const_cast<char*>(this->interface), IFNAMSIZ - 1);
 
 	if (ioctl(sock, SIOCGIFCONF, &ifr)) {
 		perror("ioctl");
@@ -80,32 +78,11 @@ int ArpSpoof::receiveTargetMacAddress(pcap_t& handle, uint8_t& senderIpAddress, 
 }
 
 int ArpSpoof::sendInfectPacket(IN pcap_t& handle, IN uint8_t& senderIpAddress, IN uint8_t& targetIpAddress) {
-	uint8_t* senderMacAddress;
-	uint8_t packet[sizeof(etherHeader) + sizeof(arpHeader)];
-	etherHeader* ethernetPacket;
-	arpHeader* arpPacket;
-
-	senderMacAddress = getSenderMacAddress(interface);
 
 	return 0;
 }
 
-int ArpSpoof::receivePacketRelay(pcap_t& handle, uint8_t& senderIpAddress, uint8_t& targetIpAddress) {
-	struct pcap_pkthdr* pcapHeader;
-	uint8_t* packet;
+int ArpSpoof::receivePacketRelay(pcap_t& handle) {
 
-	if (pcap_next_ex(handle, &pcapHeader, &packet)) {
-		perror("pcap_next_ex");
-		exit(EXIT_FAILURE);
-	}
-
-	etherHeader* ether = (etherHeader*)(packet);
-	arpHeader* arp = (arpHeader*)(packet + 14);
-
-	switch (ntohs(ether->type)) {
-	case ETHERTYPE_ARP:
-
-	default:
-		break;
-	}
+	return 0;
 }

@@ -1,4 +1,4 @@
-CC = g++
+CPP = g++
 CFLAGS = -lpcap
 TARGET = arp_spoof
 
@@ -12,11 +12,11 @@ HEADERS = $(wildcard $(INCLUDE_DIR)/*.h)
 $(TARGET): $(OBJECTS)
 	@mkdir -p $(BINARY_DIR)
 	@echo "[+] Make Binary File"
-	$(CC) -g -o $(BINARY_DIR)/$@ $< $(CFLAGS)
+	$(CPP) -g -o $(BINARY_DIR)/$@ $< $(CFLAGS)
 
 %.o: %.cpp $(HEADERS)
 	@echo "[+] Compile *.cpp File"
-	$(CC) -g -c -o $@ $< -I$(INCLUDE_DIR)
+	$(CPP) -g -c -o $@ $< -I$(INCLUDE_DIR)
 
 clean:
 	@rm -f $(SOURCE_DIR)/*.o

@@ -13,12 +13,14 @@ private:
 	uint16_t type;
 
 	// constants
-	constexpr uint16_t ETHERTYPE_IP = 0x8000;
-	constexpr uint16_t ETHERTYPE_ARP = 0x0806
+	static constexpr uint16_t ETHERTYPE_IP = 0x8000;
+	static constexpr uint16_t ETHERTYPE_ARP = 0x0806;
 
 public:
 	Ethernet() {};
 	Ethernet(uint8_t& destinationMac, uint8_t& sourceMac);
+
+	int setInfo(uint8_t& destinationMac, uint8_t& sourceMac);
 
 	friend ostream& operator<<(ostream& out, const Ethernet& ethernet);
 };

@@ -15,10 +15,6 @@
 #include <net/if.h>
 #include <unistd.h>
 
-// C++ Headers
-#include <iostream>
-using namespace std;
-
 // glibc 2.1 is missing the ifr_newname macro in <net/if.h>
 #ifndef ifr_newname
 #define ifr_newname ifr_ifru.ifru_slave

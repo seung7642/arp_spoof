@@ -19,15 +19,17 @@ private:
 	uint8_t targetProtocolAddress[4];
 
 	// constants
-	constexpr uint16_t ARP_HW_TYPE = 0x0001;
-	constexpr uint16_t ARP_PROTO_TYPE = 0x0800;
-	constexpr uint8_t ARP_HW_LEN = 0x06;
-	constexpr uint8_t ARP_PROTO_LEN = 0x04;
-	constexpr uint16_t ARP_OPCODE = 0x0001;
+	static constexpr uint16_t ARP_HW_TYPE = 0x0001;
+	static constexpr uint16_t ARP_PROTO_TYPE = 0x0800;
+	static constexpr uint8_t ARP_HW_LEN = 0x06;
+	static constexpr uint8_t ARP_PROTO_LEN = 0x04;
+	static constexpr uint16_t ARP_OPCODE = 0x0001;
 
 public:
 	Arp() {};
 	Arp(uint8_t& senderHw, uint8_t& senderIp, uint8_t& targetHw, uint8_t targetIp);
+
+	int setInfo(uint8_t& senderHw, uint8_t& senderIp, uint8_t& targetHw, uint8_t& targetIp);
 
 	friend ostream& operator<<(ostream& out, const Arp& arp);
 };
