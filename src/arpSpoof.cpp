@@ -29,7 +29,19 @@ int ArpSpoof::sendInfectPacket(pcap_t* handle, char* senderIp, char* targetIp) {
 }
 
 int ArpSpoof::receivePacketRelay(pcap_t* handle) {
-	// TODO: packet parsing 
+	struct pcap_pkthdr* pcapHeader;
+	const uint8_t* packet;
+
+	while (1) {
+		if (pcap_next_ex(handle, &pcapHeader, &packet)) {
+			perror("pcap_next_ex");
+			exit(EXIT_FAILURE);
+		}
+		
+		// How to judge packet of target?
+		etherHeader* ether = (etherHeader*)(packet);
+		arpHeader* arp = (arpHeader*)(packet + 14);
+	}
 
 	return 0;
 }
