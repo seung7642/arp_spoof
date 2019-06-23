@@ -11,15 +11,19 @@ using namespace std;
 #pragma pack(push, 1)
 class ArpSpoof {
 private:
-	uint8_t& interface;
+	char* interface;
+	char senderIpAddress[4];
+	char targetIpAddress[4];
+	uint8_t senderMacAddress[6];
+	uint8_t targetMacAddress[6];
 	Arp arp;
 	Ethernet ethernet;
 
 public:
-	ArpSpoof(uint8_t& interface);
+	ArpSpoof(char* interface, char* senderIp, char* targetIp, uint8_t* senderMac, uint8_t* targetMac);
 
-	int sendInfectPacket(pcap_t& handle, uint8_t& senderIp, uint8_t& targetIp);
-	int receivePacketRelay(pcap_t& handle);
+	int sendInfectPacket(pcap_t* handle, char* senderIp, char* targetIp);
+	int receivePacketRelay(pcap_t* handle);
 };
 #pragma pack(pop)
 

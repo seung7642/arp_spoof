@@ -19,6 +19,6 @@ $(TARGET): $(OBJECTS)
 	$(CPP) -g -c -o $@ $< -I$(INCLUDE_DIR)
 
 clean:
-	@rm -f $(SOURCE_DIR)/*.o
+	@rm -f $(SRC_DIR)/*.o
 	@rm -f $(BINARY_DIR)/$(TARGET)
 	@rmdir $(BINARY_DIR) 2>/dev/null

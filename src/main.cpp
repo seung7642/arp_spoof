@@ -125,6 +125,7 @@ int main(int argc, char* argv[]) {
 		exit(EXIT_FAILURE);
 	}
 	
+	ArpSpoof arpSpoof{ argv[1], argv[2], argv[3], senderMacAddress, targetMacAddress };
 
 	// 2. send ARP Packet to target for infect 
 
