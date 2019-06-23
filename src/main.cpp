@@ -5,7 +5,7 @@ int getSenderMacAddress(uint8_t* interface, OUT uint8_t* senderMac) {
 	// getting sender MAC Address through ioctl().
 	struct ifreq ifr;
 
-	int sock = socket(AF_INEt, SOCK_DGRAM, IPPROTO_IP);
+	int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
 	if (sock == -1) {
 		perror("socket");
 		exit(EXIT_FAILURE);

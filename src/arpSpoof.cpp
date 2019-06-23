@@ -1,8 +1,6 @@
 #include "arpSpoof.h"
 
 ArpSpoof::ArpSpoof(uint8_t& iface) : interface(iface) {
-	memset(senderMacAddress, 0x00, 6);
-	memset(targetMacAddress, 0xFF, 6);
 }
 
 int ArpSpoof::sendInfectPacket(IN pcap_t& handle, IN uint8_t& senderIpAddress, IN uint8_t& targetIpAddress) {

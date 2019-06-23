@@ -1,11 +1,11 @@
 #include "ipContainer.h"
 
-ipContainer::ipContainer(const char& ipAddress) : ipAddress{ ipAddress } {
-
+ipContainer::ipContainer(uint8_t& ip) {
+	memset(ipAddress, ip, 4);
 }
 
-void ipContainer::printIpAddress(ipContainer& ip) const {
-	cout << ip << endl;
+void ipContainer::printIpAddress() const {
+	// TODO: printting
 }
 
 
