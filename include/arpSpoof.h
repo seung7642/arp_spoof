@@ -18,7 +18,7 @@ private:
 public:
 	ArpSpoof(uint8_t& interface);
 
-	int sendInfectPacket(pcap_t& handle, uint8_t& senderIpAddress, uint8_t& targetIpAddress);
+	int sendInfectPacket(pcap_t& handle, uint8_t& senderIp, uint8_t& targetIp);
 	int receivePacketRelay(pcap_t& handle);
 };
 #pragma pack(pop)

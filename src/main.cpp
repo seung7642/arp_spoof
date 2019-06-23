@@ -1,7 +1,7 @@
 #include "main.h"
 #include "arpSpoof.h"
 
-int getSenderMacAddress(uint8_t* interface, OUT uint8_t* senderMac) {
+int getSenderMacAddress(char* interface, OUT uint8_t* senderMac) {
 	// getting sender MAC Address through ioctl().
 	struct ifreq ifr;
 
@@ -11,27 +11,27 @@ int getSenderMacAddress(uint8_t* interface, OUT uint8_t* senderMac) {
 		exit(EXIT_FAILURE);
 	}
 
-	strncpy(ifr.ifr_name, interface, IFNAMSIZ - 1);
+	memcpy(ifr.ifr_name, interface, IFNAMSIZ - 1);
 
 	if (ioctl(sock, SIOCGIFCONF, &ifr)) {
 		perror("ioctl");
 		exit(EXIT_FAILURE);
 	}
 
-	memset(senderMac, ifr.ifr_hwaddr.sa_data, 6);
+	senderMac = (uint8_t*)ifr.ifr_hwaddr.sa_data;
 
 	close(sock);
 	return 0;
 }
 
-int getTargetMacAddress(pcap_t* handle, uint8_t* senderIp, uint8_t* targetIp, uint8_t* senderMac, OUT uint8_t* targetMac) {
+int getTargetMacAddress(pcap_t* handle, char* senderIp, char* targetIp, uint8_t* senderMac, OUT uint8_t* targetMac) {
 	// getting MAC Address through broadcasting.
 	uint8_t packet[sizeof(etherHeader) + sizeof(arpHeader)];
 	etherHeader* ether;
 	arpHeader* arp;
 
 	memset(ether->destinationMacAddress, 0xFF, 6);
-	memset(ether->sourceMacAddress, senderMac, 6);
+	memcpy(ether->sourceMacAddress, senderMac, 6);
 	ether->type = ETHERTYPE_ARP;
 
 	arp->hardwareType = ARP_HW_TYPE;
@@ -39,10 +39,10 @@ int getTargetMacAddress(pcap_t* handle, uint8_t* senderIp, uint8_t* targetIp, ui
 	arp->hardwareLength = ARP_HW_LEN;
 	arp->protocolLength = ARP_PROTO_LEN;
 	arp->opcode = ARP_OPCODE;
-	memset(arp->senderHardwareAddress, senderMac, 6);
-	memset(arp->senderProtocolAddress, senderIp, 4);
+	memcpy(arp->senderHardwareAddress, senderMac, 6);
+	memcpy(arp->senderProtocolAddress, senderIp, 4);
 	memset(arp->targetHardwareAddress, 0xFF, 6);
-	memset(arp->targetProtocolAddress, targetIp, 4);
+	memcpy(arp->targetProtocolAddress, targetIp, 4);
 
 	// setting packet for broadcasting
 	memcpy(packet, ether, sizeof(etherHeader));
@@ -64,11 +64,11 @@ int getTargetMacAddress(pcap_t* handle, uint8_t* senderIp, uint8_t* targetIp, ui
 	return 0;
 }
 
-int packetParsing(pcap_t* handle, uint8_t* senderIp, uint8_t* targetIp, OUT uint8_t* targetMac) {
+int packetParsing(pcap_t* handle, char* senderIp, char* targetIp, OUT uint8_t* targetMac) {
 	struct pcap_pkthdr* pcapHeader;
-	uint8_t* packet;
+	const uint8_t* packet;
 
-	if (pcap_next_ex(handle, &pcapHeader, packet)) {
+	if (pcap_next_ex(handle, &pcapHeader, &packet)) {
 		perror("pcap_next_ex");
 		exit(EXIT_FAILURE);
 	}
@@ -79,7 +79,7 @@ int packetParsing(pcap_t* handle, uint8_t* senderIp, uint8_t* targetIp, OUT uint
 	switch (ntohs(ether->type)) {
 	case ETHERTYPE_ARP:
 		if (!memcmp(arp->senderProtocolAddress,targetIp, 4)) {
-			memset(targetMac, arp->senderHardwareAddress, 6);
+			memcpy(targetMac, arp->senderHardwareAddress, 6);
 			return 1;
 		}
 		break;
@@ -98,7 +98,6 @@ void usage() {
 }
 
 int main(int argc, char* argv[]) {
-	ArpSpoof arp{ argv[1] };
 	pcap_t* handle;
 	char errbuf[PCAP_ERRBUF_SIZE];
 	uint8_t senderMacAddress[6];
@@ -128,13 +127,8 @@ int main(int argc, char* argv[]) {
 	
 
 	// 2. send ARP Packet to target for infect 
-	arp.setEtherHeader();
-	arp.setArpHeader();
-	arp.sendInfectPacket();
 
 	// 3. if receive packet of target, relay packet to target. 
-	arp.receivePacketRelay();
-
 
 	if (handle) pcap_close(handle);
 

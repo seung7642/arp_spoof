@@ -2,16 +2,16 @@ CPP = g++
 CFLAGS = -lpcap
 TARGET = arp_spoof
 
-SOURCE_DIR = src
+SRC_DIR = src
 INCLUDE_DIR = include
 BINARY_DIR = bin
 
-OBJECTS = $(patsubst %.cpp, %.o, $(wildcard $(SOURCE_DIR)/*.cpp))
+OBJECTS = $(patsubst %.cpp, %.o, $(wildcard $(SRC_DIR)/*.cpp))
 HEADERS = $(wildcard $(INCLUDE_DIR)/*.h)
 
 $(TARGET): $(OBJECTS)
-	@mkdir -p $(BINARY_DIR)
 	@echo "[+] Make Binary File"
+	@mkdir -p $(BINARY_DIR)
 	$(CPP) -g -o $(BINARY_DIR)/$@ $< $(CFLAGS)
 
 %.o: %.cpp $(HEADERS)

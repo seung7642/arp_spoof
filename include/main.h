@@ -44,7 +44,7 @@ typedef struct _etherHeader {
 } etherHeader;
 
 typedef struct _arpHeader {
-	uint16_t hardwardType;
+	uint16_t hardwareType;
 	uint16_t protocolType;
 	uint8_t hardwareLength;
 	uint8_t protocolLength;
@@ -55,5 +55,9 @@ typedef struct _arpHeader {
 	uint8_t targetProtocolAddress[4];
 } arpHeader;
 #pragma pack(pop)
+
+int getSenderMacAddress(char* interface, OUT uint8_t* senderMac);
+int getTargetMacAddress(pcap_t* handle, char* senderIp, char* targetIp, uint8_t* senderMac, OUT uint8_t* targetMac);
+int packetParsing(pcap_t* handle, char* senderIp, char* targetIp, OUT uint8_t* targetMac);
 
 #endif

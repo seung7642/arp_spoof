@@ -3,7 +3,7 @@
 ArpSpoof::ArpSpoof(uint8_t& iface) : interface(iface) {
 }
 
-int ArpSpoof::sendInfectPacket(IN pcap_t& handle, IN uint8_t& senderIpAddress, IN uint8_t& targetIpAddress) {
+int ArpSpoof::sendInfectPacket(pcap_t& handle, uint8_t& senderIp, uint8_t& targetIp) {
 
 	return 0;
 }
