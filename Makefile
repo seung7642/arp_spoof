@@ -12,7 +12,7 @@ HEADERS = $(wildcard $(INCLUDE_DIR)/*.h)
 $(TARGET): $(OBJECTS)
 	@echo "[+] Make Binary File"
 	@mkdir -p $(BINARY_DIR)
-	$(CPP) -g -o $(BINARY_DIR)/$@ $< $(CFLAGS)
+	$(CPP) -o $(BINARY_DIR)/$@ $(OBJECTS) $(CFLAGS)
 
 %.o: %.cpp $(HEADERS)
 	@echo "[+] Compile *.cpp File"
