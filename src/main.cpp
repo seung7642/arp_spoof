@@ -1,9 +1,8 @@
 #include "main.h"
 #include "arpSpoof.h"
 
-int getSenderMacAddress(char* interface, OUT uint8_t* senderMac) {
-	// getting sender MAC Address through ioctl().
-	struct ifreq ifr;
+int getLocalMacAddress(char* interface, OUT uint8_t* localMac) {
+	struct ifreq interfaceRequest;
 
 	int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
 	if (sock == -1) {
@@ -11,20 +10,42 @@ int getSenderMacAddress(char* interface, OUT uint8_t* senderMac) {
 		exit(EXIT_FAILURE);
 	}
 
-	memcpy(ifr.ifr_name, interface, IFNAMSIZ - 1);
+	strncpy(interfaceRequest.ifr_name, interface, IFNAMSIZ - 1);
 
-	if (ioctl(sock, SIOCGIFCONF, &ifr)) {
+	if (ioctl(sock, SIOCGIFHWADDR, &interfaceRequest)) {
 		perror("ioctl");
 		exit(EXIT_FAILURE);
 	}
 
-	senderMac = (uint8_t*)ifr.ifr_hwaddr.sa_data;
+	localMac = (uint8_t*)interfaceRequest.ifr_hwaddr.sa_data;
 
-	close(sock);
+	if (sock) close(sock);
 	return 0;
 }
 
-int getTargetMacAddress(pcap_t* handle, char* senderIp, char* targetIp, uint8_t* senderMac, OUT uint8_t* targetMac) {
+int getLocalIpAddress(char* interface, OUT uint8_t* localIp) {
+	struct ifreq interfaceRequest;
+
+	int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+	if (sock == -1) {
+		perror("socket");
+		exit(EXIT_FAILURE);
+	}
+
+	strncpy(interfaceRequest.ifr_name, interface, IFNAMSIZ - 1);
+
+	if (ioctl(sock, SIOCGIFADDR, &interfaceRequest)) {
+		perror("ioctl");
+		exit(EXIT_FAILURE);
+	}
+
+	localIp = (uint8_t*)interfaceRequest.ifr_addr.sa_data;
+
+	if (sock) close(sock);
+	return 0;
+}
+
+int getMacAddress(pcap_t* handle, char* senderIp, char* targetIp, uint8_t* senderMac, OUT uint8_t* targetMac) {
 	// getting MAC Address through broadcasting.
 	uint8_t packet[sizeof(etherHeader) + sizeof(arpHeader)];
 	etherHeader* ether;

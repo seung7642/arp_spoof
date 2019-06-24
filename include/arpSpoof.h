@@ -3,8 +3,6 @@
 
 #include <iostream>
 #include <cstring>
-#include "arp.h"
-#include "ethernet.h"
 #include "main.h"
 using namespace std;
 
@@ -16,8 +14,8 @@ private:
 	char targetIpAddress[4];
 	uint8_t senderMacAddress[6];
 	uint8_t targetMacAddress[6];
-	Arp arp;
-	Ethernet ethernet;
+	arpHeader arp;
+	etherHeader ethernet;
 
 public:
 	ArpSpoof(char* interface, char* senderIp, char* targetIp, uint8_t* senderMac, uint8_t* targetMac);

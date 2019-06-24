@@ -56,8 +56,8 @@ typedef struct _arpHeader {
 } arpHeader;
 #pragma pack(pop)
 
-int getSenderMacAddress(char* interface, OUT uint8_t* senderMac);
-int getTargetMacAddress(pcap_t* handle, char* senderIp, char* targetIp, uint8_t* senderMac, OUT uint8_t* targetMac);
+int getLocalMacAddress(char* interface, OUT uint8_t* localMac);
+int getMacAddress(pcap_t* handle, char* senderIp, char* targetIp, uint8_t* senderMac, OUT uint8_t* targetMac);
 int packetParsing(pcap_t* handle, char* senderIp, char* targetIp, OUT uint8_t* targetMac);
 
 #endif
