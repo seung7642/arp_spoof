@@ -37,13 +37,20 @@
 #define ARP_OPCODE 0x0001
 
 #pragma pack(push, 1)
-typedef struct _etherHeader {
+typedef struct _ArpSession {
+	uint8_t senderMacAddress[6];
+	uint8_t senderIpAddress[4];
+	uint8_t targetMacAddress[6];
+	uint8_t targetIpAddress[4];
+} ArpSession;
+
+typedef struct _EtherHeader {
 	uint8_t destinationMacAddress[6];
 	uint8_t sourceMacAddress[6];
 	uint16_t type;
-} etherHeader;
+} EtherHeader;
 
-typedef struct _arpHeader {
+typedef struct _ArpHeader {
 	uint16_t hardwareType;
 	uint16_t protocolType;
 	uint8_t hardwareLength;
@@ -53,11 +60,7 @@ typedef struct _arpHeader {
 	uint8_t senderProtocolAddress[4];
 	uint8_t targetHardwareAddress[6];
 	uint8_t targetProtocolAddress[4];
-} arpHeader;
+} ArpHeader;
 #pragma pack(pop)
-
-int getLocalMacAddress(char* interface, OUT uint8_t* localMac);
-int getMacAddress(pcap_t* handle, char* senderIp, char* targetIp, uint8_t* senderMac, OUT uint8_t* targetMac);
-int packetParsing(pcap_t* handle, char* senderIp, char* targetIp, OUT uint8_t* targetMac);
 
 #endif
