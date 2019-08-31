@@ -1,7 +1,8 @@
 #ifndef _ARP_H
 #define _ARP_H
-
+#include <pcap.h>
 #include <main.h>
+#include <stdint.h>
 
 // Constants
 #define PROMISCUOUS 1
@@ -15,19 +16,19 @@
 #define ARP_PROTO_LEN 0x04
 #define ARP_OPCODE 0x0001
 
-#pragma pack(push, 1)
 typedef struct _ArpSession {
-	uint8_t senderMacAddress[6];
-	uint8_t senderIpAddress[4];
-	uint8_t targetMacAddress[6];
-	uint8_t targetIpAddress[4];
+	MacManager senderMacAddress;
+	IpManager senderIpAddress;
+	MacManager targetMacAddress;
+	IpManager targetIpAddress;
 } ArpSession;
 
-typedef struct _EtherHeader {
-	uint8_t destinationMacAddress[6];
-	uint8_t sourceMacAddress[6];
+#pragma pack(push, 1)
+typedef struct _EthernetHeader {
+	MacManager destinationMacAddress;
+	MacManager sourceMacAddress;
 	uint16_t type;
-} EtherHeader;
+} EthernetHeader;
 
 typedef struct _ArpHeader {
 	uint16_t hardwareType;
@@ -35,17 +36,20 @@ typedef struct _ArpHeader {
 	uint8_t hardwareLength;
 	uint8_t protocolLength;
 	uint16_t opcode;
-	uint8_t senderHardwareAddress[6];
-	uint8_t senderProtocolAddress[4];
-	uint8_t targetHardwareAddress[6];
-	uint8_t targetProtocolAddress[4];
+	MacManager senderHardwareAddress;
+	IpManager senderProtocolAddress;
+	MacManager targetHardwareAddress;
+	IpManager targetProtocolAddress;
 } ArpHeader;
+
+typedef struct _MergedHeader {
+	EthernetHeader ethernetPacket;
+	ArpHeader arpPacket;
+} MergedHeader;
 #pragma pack(pop)
 
-int getLocalMacAddress(char* interfaceName, OUT uint8_t* localMacAddress);
-int getLocalIpAddress(char* interfaceName, OUT uint8_t* localIpAddress);
-int getMacAddress(IN pcap_t* handle, IN uint8_t* localIpAddress, IN uint8_t* localMacAddress, IN uint8_t* targetIpAddress, OUT uint8_t* targetMacAddress);
-int receiveMacAddress(IN pcap_t* handle, IN uint8_t* localIpAddress, IN uint8_t* localMacAddress, IN uint8_t* targetIpAddress, OUT uint8_t* targetMacAddress);
-int infectSender(pcap_t* handle, uint8_t* localMacAddress, ArpSession arpSession); 
+int receiveSenderMacAddress(IN pcap_t *handle, IN IpManager senderIpAddress, OUT MacManager &senderMacAddress);
+int getSenderMacAddress(IN pcap_t *handle, IN MacManager targetMacAddress, IN IpManager targetIpAddress, IN IpManager senderIpAddress, OUT MacManager &senderMacAddress);
+int infectSender(IN pcap_t *handle, IN MacManager localMacAddress, IN ArpSession arpSession, IN int count);
 
 #endif
