@@ -1,6 +1,6 @@
 #ifndef _IP_MANAGER_H
 #define _IP_MANAGER_H
-#include <stdint.h>
+#include <cstdint>
 #include <netinet/in.h>
 
 #define IN

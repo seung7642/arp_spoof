@@ -2,7 +2,7 @@
 #define _ARP_H
 #include <pcap.h>
 #include <main.h>
-#include <stdint.h>
+#include <cstdint>
 
 // Constants
 #define PROMISCUOUS 1
@@ -42,7 +42,7 @@ typedef struct _ArpHeader {
 	IpManager targetProtocolAddress;
 } ArpHeader;
 
-typedef struct _MergedHeader {
+typedef struct _MergedHeader { // EthernetHeader + ArpHeader
 	EthernetHeader ethernetPacket;
 	ArpHeader arpPacket;
 } MergedHeader;
@@ -50,6 +50,6 @@ typedef struct _MergedHeader {
 
 int receiveSenderMacAddress(IN pcap_t *handle, IN IpManager senderIpAddress, OUT MacManager &senderMacAddress);
 int getSenderMacAddress(IN pcap_t *handle, IN MacManager targetMacAddress, IN IpManager targetIpAddress, IN IpManager senderIpAddress, OUT MacManager &senderMacAddress);
-int infectSender(IN pcap_t *handle, IN MacManager localMacAddress, IN ArpSession arpSession, IN int count);
+int infectSender(IN pcap_t *handle, IN MacManager localMacAddress, IN ArpSession arpSession);
 
 #endif
