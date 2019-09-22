@@ -17,3 +17,7 @@ void MacManager::printMacAddress(IN const char *prefix) {
     macAddress[0], macAddress[1], macAddress[2],
     macAddress[3], macAddress[4], macAddress[5]);
 }
+
+void MacManager::setBroadcast() {
+    memset(this->macAddress, 0xFF, LENGTH);
+}
